@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,10 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`posts`')]
 #[ORM\UniqueConstraint(
     name: 'unique_slug_for_published_date',
-    columns: ['slug', 'publishedAt']
+    columns: ['slug', 'published_at']
 )]
+#[ORM\HasLifecycleCallbacks]
 class Post
 {
+    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -26,12 +30,6 @@ class Post
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $publishedAt;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
@@ -77,30 +75,6 @@ class Post
     public function setPublishedAt(?\DateTimeImmutable $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

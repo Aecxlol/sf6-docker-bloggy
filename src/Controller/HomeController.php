@@ -10,6 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    /**
+     * @param UserRepository $userRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_home')]
     public function index(UserRepository $userRepository): Response
     {

@@ -13,8 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    /**
+     * @param AdminUrlGenerator $adminUrlGenerator
+     */
     public function __construct(private AdminUrlGenerator $adminUrlGenerator) {}
 
+    /**
+     * @return Response
+     */
     #[Route('/admin', name: 'app_admin')]
     #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
@@ -22,12 +28,18 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($this->adminUrlGenerator->setController(PostCrudController::class)->generateUrl());
     }
 
+    /**
+     * @return Dashboard
+     */
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
             ->setTitle('Bloggy');
     }
 
+    /**
+     * @return iterable
+     */
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');

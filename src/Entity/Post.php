@@ -28,7 +28,7 @@ class Post
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $slug;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'text')]
     private $body;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]

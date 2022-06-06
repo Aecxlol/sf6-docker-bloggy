@@ -13,17 +13,24 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PostCrudController extends AbstractCrudController
 {
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Post::class;
     }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('title'),
             SlugField::new('slug')->setTargetFieldName('title'),
-            TextEditorField::new('body'),
+            TextareaField::new('body')->hideOnIndex(),
             DateTimeField::new('publishedAt'),
             AssociationField::new('author'),
         ];

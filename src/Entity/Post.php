@@ -25,7 +25,10 @@ class Post
     #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    private $slug;
+
+    #[ORM\Column(type: 'string')]
     private $body;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -35,8 +38,6 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private $author;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $slug;
 
     public function getId(): ?int
     {
@@ -51,6 +52,18 @@ class Post
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -87,18 +100,6 @@ class Post
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

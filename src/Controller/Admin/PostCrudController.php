@@ -27,6 +27,7 @@ class PostCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
+        # hideOnIndex() hides the body field on index action (url)
         return [
             TextField::new('title'),
             SlugField::new('slug')->setTargetFieldName('title'),

@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -20,6 +22,16 @@ class PostCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Post::class;
+    }
+
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud->setSearchFields(['title'])
+            ->setAutofocusSearch();
     }
 
     /**
@@ -41,6 +53,7 @@ class PostCrudController extends AbstractCrudController
     {
         # hideOnIndex() hides the body field on index action (url)
         return [
+            IdField::new('id')->onlyOnIndex(),
             TextField::new('title'),
             SlugField::new('slug')->setTargetFieldName('title'),
             TextareaField::new('body')->hideOnIndex(),

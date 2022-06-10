@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\Table(name: '`posts`')]
+# the combination of the slug and publishedAt has to be unique
 #[ORM\UniqueConstraint(
     name: 'unique_slug_for_published_date',
     columns: ['slug', 'published_at']
@@ -20,23 +21,23 @@ class Post
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $slug;
+    private ?string $slug;
 
     #[ORM\Column(type: 'text')]
-    private $body;
+    private ?string $body;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $publishedAt;
+    private ?\DateTimeImmutable $publishedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
-    private $author;
+    private ?User $author;
 
 
     public function getId(): ?int

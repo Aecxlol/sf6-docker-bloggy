@@ -5,7 +5,7 @@
 {% block body %}
     <article>
         <h1>{{ post.title }}</h1>
-        <p>Published : {{ post.publishedAt|date }} by {{ post.author.email }}</p>
-        <p>{{ post.body }}</p>
+        <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i:s') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
+        <p>{{ post.body|nl2br }}</p>
     </article>
 {% endblock %}

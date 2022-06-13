@@ -47,7 +47,8 @@ class PostRepository extends ServiceEntityRepository
     public function findAllPublished(): LazyCriteriaCollection
     {
         $criteria = new Criteria();
-        $criteria->andWhere(Criteria::expr()->neq('publishedAt', null));
+        $criteria->andWhere(Criteria::expr()->neq('publishedAt', null))
+            ->orderBy(['publishedAt' => $criteria::DESC]);
 
         return $this->matching($criteria);
     }

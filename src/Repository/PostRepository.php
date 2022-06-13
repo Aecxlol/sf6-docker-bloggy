@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\LazyCriteriaCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +39,17 @@ class PostRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return LazyCriteriaCollection
+     */
+    public function findAllPublished(): LazyCriteriaCollection
+    {
+        $criteria = new Criteria();
+        $criteria->andWhere(Criteria::expr()->neq('publishedAt', null));
+
+        return $this->matching($criteria);
     }
 
 //    /**

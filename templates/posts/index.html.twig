@@ -6,7 +6,7 @@
         <article>
             <h2><a href="{{ path('app_posts_show', {'slug': post.slug}) }}">{{ post.title }}</a></h2>
 
-            <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i:s') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
+            <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
 
             <p>{{ post.body|u.truncate(50, '...')}}</p>
         </article>

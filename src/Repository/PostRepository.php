@@ -42,15 +42,15 @@ class PostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return LazyCriteriaCollection
+     * @return array
      */
-    public function findAllPublished(): LazyCriteriaCollection
+    public function findAllPublished(): array
     {
-        $criteria = new Criteria();
-        $criteria->andWhere(Criteria::expr()->neq('publishedAt', null))
-            ->orderBy(['publishedAt' => $criteria::DESC]);
-
-        return $this->matching($criteria);
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.publishedAt IS NOT NULL')
+            ->orderBy('p.publishedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

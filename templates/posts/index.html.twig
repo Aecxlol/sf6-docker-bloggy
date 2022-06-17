@@ -4,7 +4,7 @@
     <h1>Welcome to Bloggy!</h1>
     {% for post in posts %}
         <article>
-            <h2><a href="{{ path('app_posts_show', {'slug': post.slug}) }}">{{ post.title }}</a></h2>
+            <h2><a href="{{ path('app_posts_show', post.getPathParams()) }}">{{ post.title }}</a></h2>
 
             <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
 

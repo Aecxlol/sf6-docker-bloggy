@@ -8,4 +8,6 @@
         <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
         <p>{{ post.body|nl2br }}</p>
     </article>
+
+    <a href="{{ path('app_home') }}">Go back to homepage</a>
 {% endblock %}

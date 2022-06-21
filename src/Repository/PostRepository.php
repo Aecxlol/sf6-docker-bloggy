@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,15 +42,14 @@ class PostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array
+     * @return Query
      */
-    public function findAllPublished(): array
+    public function getAllPublishedArticlesQuery(): Query
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.publishedAt IS NOT NULL')
             ->orderBy('p.publishedAt', 'DESC')
             ->getQuery()
-            ->getResult()
         ;
     }
 

@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>My blog ({{ pagination.getTotalItemCount }}) posts</h1>
     {% for post in pagination %}
-        <article>
-            <h2><a href="{{ path('app_posts_show', post.getPathParams()) }}">{{ post.title }}</a></h2>
+        <article class="mb-5">
+            <h2><a class="text-decoration-none" href="{{ path('app_posts_show', post.getPathParams()) }}">{{ post.title }}</a></h2>
 
-            <p>Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
+            <p class="text-muted fst-italic">Published : <time datetime="{{ post.publishedAt|date('Y-m-d H:i') }}">{{ post.publishedAt|date }}</time> by {{ post.author.email }}</p>
 
             <p>{{ post.body|u.truncate(50, '...')}}</p>
         </article>

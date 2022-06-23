@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
 use App\Repository\PostRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Knp\Component\Pager\PaginatorInterface;
@@ -15,7 +16,9 @@ class PostsController extends AbstractController
     /**
      * @param PostRepository $postRepository
      */
-    public function __construct(private PostRepository $postRepository) {}
+    public function __construct(private PostRepository $postRepository)
+    {
+    }
 
     /**
      * @param PaginatorInterface $paginator
@@ -27,11 +30,11 @@ class PostsController extends AbstractController
     {
         $query = $this->postRepository->getAllPublishedArticlesQuery();
 
-        $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            1
-        );
+        $page = $request->query->getInt('page', 1);
+
+        $pagination = $paginator->paginate($query, $page, Post::LIMIT_PER_PAGE, [
+            PaginatorInterface::PAGE_OUT_OF_RANGE => PaginatorInterface::PAGE_OUT_OF_RANGE_FIX
+        ]);
 
         return $this->render('posts/index.html.twig', compact('pagination'));
     }
@@ -58,7 +61,7 @@ class PostsController extends AbstractController
     {
         $post = $this->postRepository->findOneByPublishedDateAndSlug($year, $month, $day, $slug);
 
-        if(is_null($post)){
+        if (is_null($post)) {
             throw $this->createNotFoundException("Post not found");
         }
 

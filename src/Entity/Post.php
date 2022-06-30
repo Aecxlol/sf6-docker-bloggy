@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\Timestampable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\ArrayShape;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\Table(name: '`posts`')]
@@ -110,12 +111,10 @@ class Post
     /**
      * @return array
      */
-    public function getPathParams(): array
+    #[ArrayShape(['date' => "string", 'slug' => "null|string"])] public function getPathParams(): array
     {
         return [
-          'year' => $this->getPublishedAt()->format('Y'),
-          'month' => $this->getPublishedAt()->format('m'),
-          'day' => $this->getPublishedAt()->format('d'),
+          'date' => $this->getPublishedAt()->format('Y-m-d'),
           'slug' => $this->getSlug()
         ];
     }

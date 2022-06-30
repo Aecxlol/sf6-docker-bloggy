@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query;
@@ -54,24 +55,18 @@ class PostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $year
-     * @param int $month
-     * @param int $day
+     * @param DateTimeImmutable $date
      * @param string $slug
      * @return Post|null
      * @throws NonUniqueResultException
      */
-    public function findOneByPublishedDateAndSlug(int $year, int $month, int $day, string $slug): ?Post
+    public function findOneByPublishedDateAndSlug(DateTimeImmutable $date, string $slug): ?Post
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('YEAR(p.publishedAt) = :year')
-            ->andWhere('MONTH(p.publishedAt) = :month')
-            ->andWhere('DAY(p.publishedAt) = :day')
+            ->andWhere('DATE(p.publishedAt) = :date')
             ->andWhere('p.slug = :slug')
             ->setParameters([
-                'year' => $year,
-                'month' => $month,
-                'day' => $day,
+                'date' => $date,
                 'slug' => $slug
             ])
             ->getQuery()

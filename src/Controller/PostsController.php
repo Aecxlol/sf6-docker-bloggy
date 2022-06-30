@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 class PostsController extends AbstractController
 {
@@ -40,26 +42,22 @@ class PostsController extends AbstractController
     }
 
     /**
-     * @param int $year
-     * @param int $month
-     * @param int $day
+     * @param DateTimeImmutable $date
      * @param string $slug
      * @return Response
      * @throws NonUniqueResultException
      */
-    #[Route('/posts/{year}/{month}/{day}/{slug}',
+    #[Route('/posts/{date}/{slug}',
         name: 'app_posts_show',
         requirements: [
-            'year' => '[0-9]{4}',
-            'month' => '[0-9]{2}',
-            'day' => '[0-9]{2}',
-            'slug' => '[a-z0-9\-]+',
+            'date' => Requirement::DATE_YMD,
+            'slug' => Requirement::ASCII_SLUG
         ],
         methods: ['GET']
     )]
-    public function show(int $year, int $month, int $day, string $slug): Response
+    public function show(DateTimeImmutable $date, string $slug): Response
     {
-        $post = $this->postRepository->findOneByPublishedDateAndSlug($year, $month, $day, $slug);
+        $post = $this->postRepository->findOneByPublishedDateAndSlug($date, $slug);
 
         if (is_null($post)) {
             throw $this->createNotFoundException("Post not found");

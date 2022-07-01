@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\SharePostFormType;
 use App\Repository\PostRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
@@ -66,6 +67,12 @@ class PostsController extends AbstractController
         return $this->render('posts/show.html.twig', compact('post'));
     }
 
+    /**
+     * @param DateTimeImmutable $date
+     * @param string $slug
+     * @return Response
+     * @throws NonUniqueResultException
+     */
     #[Route('/posts/{date}/{slug}/share',
         name: 'app_posts_share',
         requirements: [
@@ -76,6 +83,14 @@ class PostsController extends AbstractController
     )]
     public function share(DateTimeImmutable $date, string $slug): Response
     {
-        dd($date, $slug);
+        $post = $this->postRepository->findOneByPublishedDateAndSlug($date, $slug);
+
+        if (is_null($post)) {
+            throw $this->createNotFoundException("Post not found");
+        }
+
+        $shareForm = $this->createForm(SharePostFormType::class);
+
+        return $this->renderForm('posts/share.html.twig', compact('shareForm', 'post'));
     }
 }

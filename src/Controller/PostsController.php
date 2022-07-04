@@ -68,6 +68,7 @@ class PostsController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @param DateTimeImmutable $date
      * @param string $slug
      * @return Response
@@ -81,7 +82,7 @@ class PostsController extends AbstractController
         ],
         methods: ['GET', 'POST']
     )]
-    public function share(DateTimeImmutable $date, string $slug): Response
+    public function share(Request $request, DateTimeImmutable $date, string $slug): Response
     {
         $post = $this->postRepository->findOneByPublishedDateAndSlug($date, $slug);
 
@@ -90,6 +91,12 @@ class PostsController extends AbstractController
         }
 
         $shareForm = $this->createForm(SharePostFormType::class);
+
+        $shareForm->handleRequest($request);
+
+        if ($shareForm->isSubmitted() && $shareForm->isValid()) {
+            dd($shareForm->getData());
+        }
 
         return $this->renderForm('posts/share.html.twig', compact('shareForm', 'post'));
     }

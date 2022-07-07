@@ -107,12 +107,10 @@ class PostsController extends AbstractController
         if ($shareForm->isSubmitted() && $shareForm->isValid()) {
             $formData = $shareForm->getData();
 
-            $postUrl = $this->generateUrl('app_posts_show', $post->getPathParams(), UrlGeneratorInterface::ABSOLUTE_URL);
-
             $subject = sprintf('%s recommends you to read "%s"', $formData['sender_name'], $post->getTitle());
 
             $email = (new TemplatedEmail())
-                ->from(new Address('hello@bloggy.wip', 'Bloggy'))
+                ->from(new Address($this->getParameter('app.contact_email'), $this->getParameter('app.name')))
                 ->to($formData['receiver_email'])
                 ->subject($subject)
                 ->htmlTemplate('emails/posts/share.html.twig')

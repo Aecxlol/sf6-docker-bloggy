@@ -8,6 +8,7 @@ use App\Repository\PostRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -110,13 +111,16 @@ class PostsController extends AbstractController
 
             $subject = sprintf('%s recommends you to read "%s"', $formData['sender_name'], $post->getTitle());
 
-            $message = sprintf("Read \"%s\" at %s.\n\n%s's comment: %s", $post->getTitle(), $postUrl, $formData['sender_name'], $formData['sender_comments']);
-
-            $email = (new Email())
+            $email = (new TemplatedEmail())
                 ->from(new Address('hello@bloggy.wip', 'Bloggy'))
                 ->to($formData['receiver_email'])
                 ->subject($subject)
-                ->text($message);
+                ->htmlTemplate('emails/posts/share.html.twig')
+                ->context([
+                    'post' => $post,
+                    'sender_name' => $formData['sender_name'],
+                    'sender_comments' => $formData['sender_comments'],
+                ]);
 
             $mailer->send($email);
 
